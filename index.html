@@ -1,0 +1,159 @@
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Change WordPress URL in Database</title>
+	<style>
+		body {
+			background-color: #f4f4f8;
+			padding: 1rem;
+			font-family: 'Courier New', monospace;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+
+		.wrapper {
+			max-width: 800px;
+			margin: 0 auto;
+			text-align: center;
+		}
+
+		h1,
+		p {
+			margin-bottom: 24px;
+			max-width: 80%;
+			margin-left: auto;
+			margin-right: auto;
+		}
+
+
+		.inputs {
+			margin-bottom: 24px;
+		}
+
+		input[type=url] {
+			outline: none;
+			margin: 16px;
+			padding: 8px 0 8px 16px;
+			border: 3px solid rgb(150, 150, 150);
+			box-shadow: 0px 0px 0px 1px rgb(90, 90, 90),
+				inset 0px 0px 0px 1px rgb(90, 90, 90),
+				1px 2px 0px 2px rgb(100, 100, 100);
+			color: rgb(50, 50, 50);
+			font-family: "M PLUS 1p", sans-serif;
+			font-weight: 700;
+			font-size: 18px;
+		}
+
+		input[type=url]:focus {
+			border-color: burlywood;
+		}
+
+		input[type=submit] {
+			background: #7c7c7c;
+			border-bottom: 2px inset rgba(0, 0, 0, 0.5);
+			border-left: 2px inset rgba(0, 0, 0, 0.5);
+			border-right: 2px inset rgba(255, 255, 255, 0.5);
+			border-top: 2px inset rgba(255, 255, 255, 0.5);
+			box-shadow: 0px 0px 0px 1px rgb(90, 90, 90),
+				inset 0px 0px 0px 1px rgb(90, 90, 90),
+				1px 2px 0px 1px rgb(100, 100, 100);			
+			box-sizing: border-box;
+			color: #fff;
+			cursor: pointer;
+			display: inline-block;
+			font-size: 18px;
+			margin-left: 8px;
+			padding: 10px 16px;
+			text-transform: uppercase;
+			width: auto;
+		}
+
+		input[type=submit]:focus,
+		input[type=submit]:hover {
+			background-color: burlywood;
+			color: black;
+			border-color: #7c7c7c;
+		}
+
+		.snippets {
+			background-color: #fff;
+			padding: 24px;
+			margin-bottom: 24px;
+			border: 3px solid rgb(150, 150, 150);
+			box-shadow: 0px 0px 0px 1px rgb(90, 90, 90),
+				inset 0px 0px 0px 1px rgb(90, 90, 90),
+				1px 2px 0px 2px rgb(100, 100, 100);			
+		}
+
+		code {
+			color: crimson;
+			font-size: 16px;
+			display: block;
+			text-align: left;
+			margin-bottom: 16px;
+		}
+
+		code:last-of-type {
+			margin-bottom: 0;
+		}
+
+
+	</style>
+</head>
+
+<body>
+	<div class="wrapper">
+		<h1>Change WordPress URL in Database</h1>
+
+		<p>Enter the old and new site urls and then execute the below snippets in your database.</p>
+
+		<div class="inputs">
+			<input id="old-url-input" type="url" placeholder="http://www.oldurl.com">
+			<input id="new-url-input" type="url" placeholder="http://www.newurl.com">
+			<input id="generate-urls" type="submit" value="Submit">
+		</div>
+
+		<div class="snippets">
+			<code>UPDATE wp_options SET option_value = replace(option_value, '<span
+					class="old-url-text">http://www.oldurl.com</span>', '<span
+					class="new-url-text">http://www.newurl.com</span>') WHERE option_name = 'home' OR option_name =
+				'siteurl';</code>
+			<code>UPDATE wp_posts SET guid = replace(guid, '<span
+					class="old-url-text">http://www.oldurl.com</span>','<span
+					class="new-url-text">http://www.newurl.com</span>');</code>
+			<code>UPDATE wp_posts SET post_content = replace(post_content, '<span
+					class="old-url-text">http://www.oldurl.com</span>', '<span
+					class="new-url-text">http://www.newurl.com</span>');</code>
+			<code>UPDATE wp_postmeta SET meta_value = replace(meta_value,'<span
+					class="old-url-text">http://www.oldurl.com</span>','<span
+					class="new-url-text">http://www.newurl.com</span>');</code>
+		</div>
+
+		<p>For alternative methods <a href="https://kinsta.com/knowledgebase/wordpress-change-ur" target="_blank">check out this article</a></p>
+	</div>
+
+	<script>
+		function generateUrls() {
+			var oldUrl = document.getElementById('old-url-input').value;
+			var newUrl = document.getElementById('new-url-input').value;
+
+			var oldUrlText = document.getElementsByClassName('old-url-text');
+			var newUrlText = document.getElementsByClassName('new-url-text');
+
+			for (var i = 0; i < oldUrlText.length; i++) {
+				oldUrlText[i].innerHTML = oldUrl;
+			}
+
+			for (var i = 0; i < newUrlText.length; i++) {
+				newUrlText[i].innerHTML = newUrl;
+			}
+		}
+		let submit = document.getElementById('generate-urls').addEventListener('click', generateUrls);
+	</script>
+
+</body>
+
+</html>
